@@ -1,5 +1,7 @@
 <?php
 return [
+    'smtp_user' => 'example@gmail.com',
+    'smtp_pass'=> '*************',
     'name' => 'S.Mohammad Emami Razavi',
     'job_title' => 'Lead and Sr. developer',
     'skills' => [
