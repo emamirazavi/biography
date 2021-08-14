@@ -2,6 +2,7 @@
 return [
     'smtp_user' => 'example@gmail.com',
     'smtp_pass'=> '*************',
+    'email' => 'emamirazavi@gmail.com',
     'name' => 'S.Mohammad Emami Razavi',
     'job_title' => 'Lead and Sr. developer',
     'skills' => [

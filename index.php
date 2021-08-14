@@ -4,6 +4,7 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
+use Gregwar\Captcha\CaptchaBuilder;
 
 //Load Composer's autoloader
 require 'vendor/autoload.php';
@@ -11,34 +12,58 @@ require 'vendor/autoload.php';
 //Create an instance; passing `true` enables exceptions
 $mail = new PHPMailer(true);
 
-$config = require './config.php';
 
-if (1) {
+
+$config = require './config.php';
+$builder = new CaptchaBuilder;
+$builder->build();
+/*
+ * array (size=5)
+  'name' => string 'mohammad' (length=8)
+  'email' => string 'emamirazavi@gmail.com' (length=21)
+  'phone' => string '+989102260264' (length=13)
+  'message' => string 'khodam!!!' (length=9)
+  'submitButton' => string '' (length=0)
+ */
+if (isset($_POST['submitButton'])) {
     try {
+        if(!$builder->testPhrase($_POST['captcha'])) {
+            throw new Exception('captcha wrong!');
+        }
         //Server settings
-        $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
+        $mail->SMTPDebug = SMTP::DEBUG_OFF;                      //Enable verbose debug output
         $mail->isSMTP();                                            //Send using SMTP
         $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
         $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
         $mail->Username   = $config['smtp_user'];                     //SMTP username
-        $mail->Password   = $confg['smtp_pass'];                               //SMTP password
+        $mail->Password   = $config['smtp_pass'];                               //SMTP password
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
         $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
     
         //Recipients
-        $mail->setFrom('emamirazavi@gmail.com');        
-        $mail->addCC('mhemamirazavi@gmail.com');
+        $mail->setFrom($_POST['email'], $_POST['name']);     
+        $mail->addAddress($config['email']);   
+        // $mail->addCC($config['email']);
     
         //Content
         $mail->isHTML(true);                                  //Set email format to HTML
         $mail->Subject = 'Biography Contact US';
-        $mail->Body    = 'This is the HTML message body <b>in bold!</b>';
-        $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+        $mail->Body    = sprintf('<b>Full name</b><br/>%s<br/>
+        <b>Email</b><br/>%s<br/>
+        <b>Phone</b><br/>%s<br/>
+        <b>Message</b><br/>%s', 
+        $_POST['name'], $_POST['email'], $_POST['phone'], nl2br($_POST['message']));
+        $mail->AltBody = strip_tags($mail->Body);
     
         $mail->send();
-        echo 'Message has been sent';
+        // echo 'Message has been sent';
     } catch (Exception $e) {
-        echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+        if ($e->getmessage()) {
+            echo $e->getmessage();
+        } else {
+            echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+        }
+        exit;
     }
 }
 ?>
@@ -209,32 +234,38 @@ if (1) {
                         <!-- To make this form functional, sign up at-->
                         <!-- https://startbootstrap.com/solution/contact-forms-->
                         <!-- to get an API token!-->
-                        <form id="contactForm" data-sb-form-api-token="API_TOKEN">
+                        <form id="contactForm"
+                        action="" method="post">
                             <!-- Name input-->
                             <div class="form-floating mb-3">
-                                <input class="form-control" id="name" type="text" placeholder="Enter your name..." data-sb-validations="required" />
+                                <input class="form-control" id="name" name="name" type="text" placeholder="Enter your name..." data-sb-validations="required" />
                                 <label for="name">Full name</label>
                                 <div class="invalid-feedback" data-sb-feedback="name:required">A name is required.</div>
                             </div>
                             <!-- Email address input-->
                             <div class="form-floating mb-3">
-                                <input class="form-control" id="email" type="email" placeholder="name@example.com" data-sb-validations="required,email" />
+                                <input class="form-control" id="email" name="email" type="email" placeholder="name@example.com" data-sb-validations="required,email" />
                                 <label for="email">Email address</label>
                                 <div class="invalid-feedback" data-sb-feedback="email:required">An email is required.</div>
                                 <div class="invalid-feedback" data-sb-feedback="email:email">Email is not valid.</div>
                             </div>
                             <!-- Phone number input-->
                             <div class="form-floating mb-3">
-                                <input class="form-control" id="phone" type="tel" placeholder="(123) 456-7890" data-sb-validations="required" />
+                                <input class="form-control" id="phone" name="phone" type="tel" placeholder="(123) 456-7890" data-sb-validations="required" />
                                 <label for="phone">Phone number</label>
                                 <div class="invalid-feedback" data-sb-feedback="phone:required">A phone number is required.</div>
                             </div>
                             <!-- Message input-->
                             <div class="form-floating mb-3">
-                                <textarea class="form-control" id="message" type="text" placeholder="Enter your message here..." style="height: 10rem" data-sb-validations="required"></textarea>
+                                <textarea class="form-control" id="message" name="message" type="text" placeholder="Enter your message here..." style="height: 10rem" data-sb-validations="required"></textarea>
                                 <label for="message">Message</label>
                                 <div class="invalid-feedback" data-sb-feedback="message:required">A message is required.</div>
                             </div>
+                            <div class="form-floating mb-3">
+                            <input class="form-control" id="captcha" name="captcha" type="text" placeholder="type captcha here!"/>
+                            <label for="captcha">Captcha</label>
+                            <img src="<?php echo $builder->inline(); ?>" />
+</div>
                             <!-- Submit success message-->
                             <!---->
                             <!-- This is what your users will see when the form-->
@@ -253,7 +284,7 @@ if (1) {
                             <!-- an error submitting the form-->
                             <div class="d-none" id="submitErrorMessage"><div class="text-center text-danger mb-3">Error sending message!</div></div>
                             <!-- Submit Button-->
-                            <button class="btn btn-primary btn-xl disabled" id="submitButton" type="submit">Send</button>
+                            <button class="btn btn-primary btn-xl" id="submitButton" name="submitButton" type="submit">Send</button>
                         </form>
                     </div>
                 </div>
