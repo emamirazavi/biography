@@ -1,5 +1,7 @@
 <?php
 return [
+    'base_url' => 'http://localhost/lab/education/biography/',
+    'email_subject' => 'Biography contact us',
     'smtp_user' => 'example@gmail.com',
     'smtp_pass'=> '*************',
     'email' => 'emamirazavi@gmail.com',
