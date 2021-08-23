@@ -16,3 +16,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+// Route::get('/', "indexController");
+
+// use App\Http\Controllers\InPhotoController;
+Route::resource('bio', BioController::class);
