@@ -2,3 +2,5 @@ samples
 config.php
 vendor
 .vscode
+database/*
+!database/empty.txt

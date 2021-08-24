@@ -9,5 +9,5 @@ class Bio extends Model
 {
     use HasFactory;
 
-    public $incrementing = true;
+    // public $incrementing = true;
 }
