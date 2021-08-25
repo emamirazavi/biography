@@ -10,4 +10,8 @@ class Bio extends Model
     use HasFactory;
 
     // public $incrementing = true;
+    public function user()
+    {
+        return $this->hasOne(User::class);
+    }
 }

@@ -21,3 +21,7 @@ Route::get('/', function () {
 
 // use App\Http\Controllers\InPhotoController;
 Route::resource('bio', BioController::class);
+
+Auth::routes(['register' => true]);
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

@@ -41,4 +41,12 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Get the bio associated with the user.
+     */
+    public function bio()
+    {
+        return $this->hasMany(Bio::class);
+    }
 }
