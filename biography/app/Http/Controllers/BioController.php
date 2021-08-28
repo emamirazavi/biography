@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Models\Bio;
 class BioController extends Controller
 {
     /**
@@ -24,7 +24,9 @@ class BioController extends Controller
      */
     public function create()
     {
-        //
+        // views/bio/create.blade.php
+        $bio = new Bio();
+        return view('bio.create', ['bio'=>$bio]);
     }
 
     /**
@@ -35,7 +37,10 @@ class BioController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required'
+        ]);
+        
     }
 
     /**
