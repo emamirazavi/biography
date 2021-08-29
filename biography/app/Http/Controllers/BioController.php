@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Bio;
+use Illuminate\Support\Facades\Auth;
+
 class BioController extends Controller
 {
     /**
@@ -38,9 +40,22 @@ class BioController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required'
+            'name' => 'required',
+            'job_title' => 'required'
         ]);
         
+        // save model
+        $bio = new Bio();
+        $bio->name = $request->get('name');
+        $bio->job_title = $request->get('job_title');
+        $bio->avatar = 'https://www.signivis.com/img/custom/avatars/gabi_avatar.png';
+        $bio->location = '';
+        $bio->about = '';
+        $bio->email_subject = '';
+        $bio->email_address = '';
+        $bio->smtp_user = $bio->smtp_pass = $bio->domain = '';
+        $bio->user_id = Auth::id();
+        $bio->save();
     }
 
     /**
