@@ -9,9 +9,31 @@ $class = 'needs-validation';
 if ($errors->any()) {
     // $class .= ' was-validated';
 }
+$route = ['bio.store'];
+if ($bio->id) {
+    $route = ['bio.update', $bio->id];
+}
 ?>
 
-{{ Form::model($bio, ['route' => ['bio.store'], 'class' => $class, 'novalidate'=>true]) }}
+{{ Form::model($bio, ['route' => $route, 'class' => $class, 'novalidate'=>true]) }}
+{{ $bio->id ? method_field('PUT') : '' }}
+<div class="form-row">
+    <div class="col-12 mb-3">
+        {{ Form::label('english_name', 'English Name', ['class' => 'form-label']) }}
+        {{ Form::text('english_name', null, ['class'=>'form-control '.($errors->has('english_name')?'is-invalid':'')]) }}
+        <small class="form-text text-muted">
+            Your bio name with english letters and numbers (a-z and 0-9).
+            <br />
+            Minimum length is 10 characters.
+
+        </small>
+        @error('english_name')
+        <div class="invalid-feedback">
+            {{ $message }}
+        </div>
+        @enderror
+    </div>
+</div>
 <div class="form-row">
     <div class="col-12 mb-3">
         {{ Form::label('name', 'Name', ['class' => 'form-label']) }}
@@ -34,6 +56,6 @@ if ($errors->any()) {
         @enderror
     </div>
 </div>
-{{ Form::submit('Add Bio', ['class'=>'btn btn-primary']); }}
+{{ Form::submit('Add/Edit', ['class'=>'btn btn-primary']); }}
 {{ Form::close() }}
 @endsection

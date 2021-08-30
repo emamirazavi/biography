@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Bio;
 use Illuminate\Support\Facades\Auth;
+use App\Helper\Validator;
 
 class BioController extends Controller
 {
@@ -39,23 +40,13 @@ class BioController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required',
-            'job_title' => 'required'
-        ]);
+        Validator::bioCreateValidate($request);
         
         // save model
         $bio = new Bio();
-        $bio->name = $request->get('name');
-        $bio->job_title = $request->get('job_title');
-        $bio->avatar = 'https://www.signivis.com/img/custom/avatars/gabi_avatar.png';
-        $bio->location = '';
-        $bio->about = '';
-        $bio->email_subject = '';
-        $bio->email_address = '';
-        $bio->smtp_user = $bio->smtp_pass = $bio->domain = '';
-        $bio->user_id = Auth::id();
-        $bio->save();
+        $all = $request->all();
+        $all['user_id'] = Auth::id();
+        Bio::create($all);
     }
 
     /**
@@ -77,7 +68,8 @@ class BioController extends Controller
      */
     public function edit($id)
     {
-        //
+        $bio = Bio::find($id);
+        return view('bio.create', ['bio'=>$bio]);
     }
 
     /**
@@ -89,7 +81,15 @@ class BioController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        Validator::bioCreateValidate($request);
+
+        $bio = Bio::find($id);
+        $all = $request->all();
+        $bio->update($all);
+
+        // redirect to edit action
+
+        return redirect()->back()->with('flash_message', ['salam!', 'success']);
     }
 
     /**

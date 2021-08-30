@@ -22,9 +22,11 @@ class Bio extends Model
     10|domain|varchar|1||0
     11|user_id|integer|1||0
      */
-    
+
     use HasFactory;
 
+    protected $guarded = ['_token'];
+    
     // public $incrementing = true;
     public function user()
     {
