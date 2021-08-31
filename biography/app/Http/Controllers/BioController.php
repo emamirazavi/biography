@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Bio;
 use Illuminate\Support\Facades\Auth;
 use App\Helper\Validator;
+use Illuminate\Support\Str;
+use App\Http\Controllers\Storage;
 
 class BioController extends Controller
 {
@@ -16,8 +18,8 @@ class BioController extends Controller
      */
     public function index()
     {
-        //
-        dd("dd? nadidam!!!");
+        $bios = Bio::all();
+        return view('bio.index', ['bios' => $bios]);
     }
 
     /**
@@ -29,7 +31,7 @@ class BioController extends Controller
     {
         // views/bio/create.blade.php
         $bio = new Bio();
-        return view('bio.create', ['bio'=>$bio]);
+        return view('bio.create', ['bio' => $bio]);
     }
 
     /**
@@ -41,12 +43,27 @@ class BioController extends Controller
     public function store(Request $request)
     {
         Validator::bioCreateValidate($request);
-        
+
         // save model
         $bio = new Bio();
-        $all = $request->all();
-        $all['user_id'] = Auth::id();
-        Bio::create($all);
+        $data = $request->all();
+        $data['user_id'] = Auth::id();
+
+        if ($request->hasFile('avatar')) {
+            $extension = $request->avatar->extension();
+            $name = Str::orderedUuid();
+            $request->avatar->storeAs('/public', $name . "." . $extension);
+            $data['avatar'] = $name . "." . $extension;
+        } else {
+            $data['avatar'] = '';
+        }
+
+        $data['email_subject'] = 'Biography Contact';
+        
+        $data['smtp_user'] = $data['smtp_pass'] = 
+        $data['domain'] = '';
+
+        Bio::create($data);
     }
 
     /**
@@ -69,7 +86,7 @@ class BioController extends Controller
     public function edit($id)
     {
         $bio = Bio::find($id);
-        return view('bio.create', ['bio'=>$bio]);
+        return view('bio.create', ['bio' => $bio]);
     }
 
     /**
