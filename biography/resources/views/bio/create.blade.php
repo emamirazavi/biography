@@ -70,8 +70,14 @@ if ($bio->id) {
     </div>
 </div>
 <div class="form-row">
-    <div class="col-12 mb-3">
+    <div class="col-12 mb-3">        
         {{ Form::label('avatar', 'Avatar', ['class' => '']) }}
+
+        <div>
+        <img src="/storage/app/{{ $bio->avatar }}" class="rounded img-fluid" alt="" 
+        style="max-width:200px; max-height: auto;">
+        </div>
+
         {{ Form::file('avatar', ['class'=>'form-control-file '.($errors->has('avatar')?'is-invalid':'')]) }}
         @error('avatar')
         <div class="invalid-feedback">
@@ -111,6 +117,6 @@ if ($bio->id) {
     </div>
 </div>
 
-{{ Form::submit('Add/Edit', ['class'=>'btn btn-primary']); }}
+{{ Form::submit($bio->id?'Edit':'Add', ['class'=>'btn btn-primary']); }}
 {{ Form::close() }}
 @endsection

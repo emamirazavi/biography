@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Bio;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use App\Helper\Validator;
+use App\Helper\FileSaver;
 use Illuminate\Support\Str;
 use App\Http\Controllers\Storage;
 
@@ -50,18 +52,13 @@ class BioController extends Controller
         $data['user_id'] = Auth::id();
 
         if ($request->hasFile('avatar')) {
-            $extension = $request->avatar->extension();
-            $name = Str::orderedUuid();
-            $request->avatar->storeAs('/public', $name . "." . $extension);
-            $data['avatar'] = $name . "." . $extension;
-        } else {
-            $data['avatar'] = '';
+            $data['avatar'] = FileSaver::saveAvatar($request);
         }
 
         $data['email_subject'] = 'Biography Contact';
-        
-        $data['smtp_user'] = $data['smtp_pass'] = 
-        $data['domain'] = '';
+
+        $data['smtp_user'] = $data['smtp_pass'] =
+            $data['domain'] = '';
 
         Bio::create($data);
     }
@@ -101,12 +98,18 @@ class BioController extends Controller
         Validator::bioCreateValidate($request);
 
         $bio = Bio::find($id);
-        $all = $request->all();
-        $bio->update($all);
+        $data = $request->all();
+        $oldAvatar = $bio->avatar;
+        if ($request->hasFile('avatar')) {
+            $data['avatar'] = FileSaver::saveAvatar($request, $bio);
+        }
+        $bio->update($data);
+
+        // deletes old avatar after saving new data
+        FileSaver::deleteAvatar($oldAvatar);
 
         // redirect to edit action
-
-        return redirect()->back()->with('flash_message', ['salam!', 'success']);
+        return redirect()->back()->with('flash_message', ['Operation done!', 'success']);
     }
 
     /**

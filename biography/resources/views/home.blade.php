@@ -20,6 +20,10 @@
 
                     <a href="/bio/create">Add Biography</a>
 
+                    <br/>
+
+                    <a href="/bio">List Biographies</a>
+
                     
                 </div>
             </div>

@@ -15,7 +15,7 @@
     <tr>
       <th scope="row">{{ $bio->id }}</th>
       <td>{{ $bio->english_name }}</td>
-      <td>{{ $bio->name }}</td>
+      <td><a href="/bio/{{ $bio->id }}/edit">{{ $bio->name }}</a></td>
       <td>{{ $bio->job_title }}</td>
     </tr>
     @endforeach
