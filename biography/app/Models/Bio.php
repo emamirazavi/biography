@@ -32,4 +32,14 @@ class Bio extends Model
     {
         return $this->hasOne(User::class);
     }
+
+    public function portfolio()
+    {
+        return $this->hasMany(Portfolio::class);
+    }
+
+    public function skill()
+    {
+        return $this->hasMany(Skill::class);
+    }
 }

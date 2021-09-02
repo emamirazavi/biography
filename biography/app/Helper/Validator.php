@@ -12,4 +12,11 @@ class Validator {
             'image' => 'mimes:jpeg,png|max:10000',
         ]);
     }
+
+    public static function portfolioCreateValidate($request){
+        $request->validate([
+            'title' => 'required',
+            'description' => 'required',
+        ]);
+    }
 }

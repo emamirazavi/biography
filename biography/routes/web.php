@@ -1,5 +1,6 @@
 <?php
 
+// use App\Http\Controllers\PortfolioController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Response;
@@ -40,6 +41,8 @@ Route::get('storage/app/{filename}', function ($filename)
 
 // use App\Http\Controllers\InPhotoController;
 Route::resource('bio', BioController::class);
+Route::resource('portfolio', PortfolioController::class);
+Route::resource('skill', SkillController::class);
 
 Auth::routes(['register' => true]);
 
