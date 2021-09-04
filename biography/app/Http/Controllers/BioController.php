@@ -71,7 +71,8 @@ class BioController extends Controller
      */
     public function show($id)
     {
-        //
+        $bio = Bio::find($id);
+        return view('bio.show', ['bio' => $bio]);
     }
 
     /**
