@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Portfolio;
 use App\Helper\Validator;
+use App\Helper\FileSaver;
 
 class PortfolioController extends Controller
 {
@@ -43,8 +44,11 @@ class PortfolioController extends Controller
         // save model
         $port = new Portfolio();
         $data = $request->all();
-        $data['img'] = '';
+        if ($request->hasFile('img')) {
+            $data['img'] = FileSaver::savePortfolio($request);
+        }
         Portfolio::create($data);
+        return redirect(route('portfolio.index'))->with('flash_message', ['Operation done!', 'success']);
     }
 
     /**
@@ -66,7 +70,8 @@ class PortfolioController extends Controller
      */
     public function edit($id)
     {
-        //
+        $model = Portfolio::find($id);
+        return view('portfolio.create', ['port' => $model]);
     }
 
     /**
@@ -78,7 +83,23 @@ class PortfolioController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        Validator::portfolioCreateValidate($request, false);
+
+        // save model
+        $port = Portfolio::find($id);
+        $data = $request->all();
+        $oldFile = $port->img;
+        if ($request->hasFile('img')) {
+            $data['img'] = FileSaver::savePortfolio($request);
+        }
+        $port->update($data);
+
+        // deletes old avatar after saving new data
+        if ($request->hasFile('img')) {
+            FileSaver::deleteFile($oldFile);
+        }
+
+        return redirect(route('portfolio.index'))->with('flash_message', ['Operation done!', 'success']);
     }
 
     /**

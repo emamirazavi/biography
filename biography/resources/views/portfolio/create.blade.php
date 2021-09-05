@@ -54,6 +54,24 @@ if ($port->id) {
     </div>
 </div>
 
+<div class="form-row">
+    <div class="col-12 mb-3">        
+        {{ Form::label('img', 'Image', ['class' => '']) }}
+
+        <div>
+        <img src="/storage/app/{{ $port->img }}" class="rounded img-fluid" alt="" 
+        style="max-width:200px; max-height: auto;">
+        </div>
+
+        {{ Form::file('img', ['class'=>'form-control-file '.($errors->has('img')?'is-invalid':'')]) }}
+        @error('img')
+        <div class="invalid-feedback">
+            {{ $message }}
+        </div>
+        @enderror
+    </div>
+</div>
+
 {{ Form::submit($port->id?'Edit':'Add', ['class'=>'btn btn-primary']); }}
 {{ Form::close() }}
 @endsection

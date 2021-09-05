@@ -9,14 +9,19 @@ class Validator {
             'email_address' => 'email:rfc,dns',
             'job_title' => 'required',
             // 'location' => 'sometimes|string',
-            'image' => 'mimes:jpeg,png|max:10000',
+            'avatar' => 'mimes:jpeg,png|max:10000',
         ]);
     }
 
-    public static function portfolioCreateValidate($request){
-        $request->validate([
+    public static function portfolioCreateValidate($request, $create = true){
+        $validate = [
             'title' => 'required',
             'description' => 'required',
-        ]);
+            'img' => 'required|mimes:jpeg,png|max:10000',
+        ];
+        if (!$create) {
+            $validate['img'] = 'mimes:jpeg,png|max:10000';
+        }
+        $request->validate($validate);
     }
 }

@@ -107,7 +107,9 @@ class BioController extends Controller
         $bio->update($data);
 
         // deletes old avatar after saving new data
-        FileSaver::deleteAvatar($oldAvatar);
+        if ($request->hasFile('avatar')) {
+            FileSaver::deleteFile($oldAvatar);
+        }
 
         // redirect to edit action
         return redirect()->back()->with('flash_message', ['Operation done!', 'success']);

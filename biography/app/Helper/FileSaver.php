@@ -15,10 +15,18 @@ class FileSaver
         return $name . "." . $extension;
     }
 
-    public static function deleteAvatar($oldAvatar)
+    public static function savePortfolio($request)
     {
-        if ($oldAvatar) {
-            $path = storage_path('app/public/' . $oldAvatar);
+        $extension = $request->img->extension();
+        $name = Str::orderedUuid();
+        $request->img->storeAs('/public', $name . "." . $extension);
+        return $name . "." . $extension;
+    }
+
+    public static function deleteFile($oldPath)
+    {
+        if ($oldPath) {
+            $path = storage_path('app/public/' . $oldPath);
             if (File::exists($path)) {
                 File::delete($path);
             }

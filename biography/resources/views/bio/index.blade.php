@@ -12,25 +12,26 @@
     </tr>
   </thead>
   <tbody>
-  @foreach ($bios as $bio)
+    @foreach ($bios as $bio)
     <tr>
       <th scope="row">{{ $bio->id }}</th>
       <td>{{ $bio->english_name }}</td>
-      <td><a href="/bio/{{ $bio->id }}/edit">{{ $bio->name }}</a></td>
+      <td><a href="/bio/{{ $bio->id }}">{{ $bio->name }}</a></td>
       <td>{{ $bio->job_title }}</td>
       <td>
-        
-      <div class="dropdown">
-  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton{{ $bio->id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-  Add
-  </button>
-  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $bio->id }}">
-    <a class="dropdown-item" href="/portfolio/create?bio_id={{ $bio->id }}">Portfolio</a>
-    <a class="dropdown-item" href="/portfolio/create?bio_id={{ $bio->id }}">Skill</a>
-  </div>
+      <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+        <div class="btn-group">
+          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton{{ $bio->id }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Add
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $bio->id }}">
+            <a class="dropdown-item" href="/portfolio/create?bio_id={{ $bio->id }}">Portfolio</a>
+            <a class="dropdown-item" href="/portfolio/create?bio_id={{ $bio->id }}">Skill</a>
+          </div>
+        </div>
+        <a class="btn btn-secondary" href="/bio/{{ $bio->id }}/edit">Edit</a>
 </div>
-      
-    </td>
+      </td>
     </tr>
     @endforeach
   </tbody>
