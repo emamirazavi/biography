@@ -26,7 +26,7 @@
           </button>
           <div class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $bio->id }}">
             <a class="dropdown-item" href="/portfolio/create?bio_id={{ $bio->id }}">Portfolio</a>
-            <a class="dropdown-item" href="/portfolio/create?bio_id={{ $bio->id }}">Skill</a>
+            <a class="dropdown-item" href="/skill/create?bio_id={{ $bio->id }}">Skill</a>
           </div>
         </div>
         <a class="btn btn-secondary" href="/bio/{{ $bio->id }}/edit">Edit</a>

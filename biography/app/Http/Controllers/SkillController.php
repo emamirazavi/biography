@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Skill;
+use App\Helper\Validator;
+use App\Helper\FileSaver;
 
 class SkillController extends Controller
 {
@@ -13,7 +16,8 @@ class SkillController extends Controller
      */
     public function index()
     {
-        //
+        $models = Skill::orderBy('id', 'desc')->get();
+        return view('skill.index', ['models' => $models]);
     }
 
     /**
@@ -23,7 +27,8 @@ class SkillController extends Controller
      */
     public function create()
     {
-        //
+        $model = new Skill();
+        return view('skill.create', ['model' => $model]);
     }
 
     /**
@@ -34,7 +39,13 @@ class SkillController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Validator::skillCreateValidate($request);
+
+        // save model
+        $model = new Skill();
+        $data = $request->all();
+        Skill::create($data);
+        return redirect(route('skill.index'))->with('flash_message', ['Operation done!', 'success']);
     }
 
     /**
@@ -56,7 +67,8 @@ class SkillController extends Controller
      */
     public function edit($id)
     {
-        //
+        $model = Skill::find($id);
+        return view('skill.create', ['model' => $model]);
     }
 
     /**
@@ -68,7 +80,13 @@ class SkillController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        Validator::skillCreateValidate($request);
+
+        // save model
+        $model = Skill::find($id);
+        $data = $request->all();
+        $model->update($data);
+        return redirect(route('skill.index'))->with('flash_message', ['Operation done!', 'success']);
     }
 
     /**

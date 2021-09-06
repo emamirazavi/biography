@@ -24,4 +24,11 @@ class Validator {
         }
         $request->validate($validate);
     }
+
+    public static function skillCreateValidate($request, $create = true){
+        $validate = [
+            'title' => 'required',
+        ];
+        $request->validate($validate);
+    }
 }
