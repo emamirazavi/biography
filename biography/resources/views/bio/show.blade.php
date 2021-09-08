@@ -3,7 +3,21 @@
 @section('content')
 
 <h3 class="mb-2">
-  Portfolios
+  Primitive Info
+</h3>
+
+<div class="card col-12">
+<div class="card-body">
+   <div><span class="font-weight-bold">Name:</span>  {{ $bio->name }}</div>
+   <div><span class="font-weight-bold">Email:</span>  {{ $bio->email_address }}</div>
+   <div><span class="font-weight-bold">Job Title:</span>  {{ $bio->job_title }}</div>
+   <div><span class="font-weight-bold">Address:</span>  {{ $bio->location }}</div>
+   <div><span class="font-weight-bold">About:</span>  {{ $bio->about }}</div>
+</div>
+</div>
+
+<h3 class="mt-4 mb-2">
+  Portfolios <a class="btn btn-info btn-sm" href="/portfolio/create?bio_id={{ $bio->id }}">+</a>
 </h3>
 <div class="card-deck">
   @foreach($bio->portfolio as $port)
@@ -23,17 +37,21 @@
   @endforeach
 </div>
 
-<h3 class="mt-2 mb-2">
+<h3 class="mt-4 mb-2">
   <div>
-  Skills
+  Skills <a class="btn btn-info btn-sm" href="/skill/create?bio_id={{ $bio->id }}">+</a>
   </div>
 </h3>
-
-<div class="card">
+<?php 
+// var_dump($bio->skill);
+?>
+@if($bio->skill->count())
+<div class="card col-12">
 <div class="card-body">
 @foreach($bio->skill as $model)
-<span class="badge badge-pill badge-light">{{ $model->title }}</span>
+<h5 class="d-inline-flex"><span class="badge badge-pill badge-light">{{ $model->title }}</span></h5>
 @endforeach
 </div></div>
+@endif
 
 @endsection

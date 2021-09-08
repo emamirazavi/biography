@@ -23,3 +23,5 @@ https://laravel.com/docs/8.x/blade
 https://mactavish10101.medium.com/how-to-upload-images-in-laravel-7-7a7f9982ebba
 
 https://stackoverflow.com/questions/37948764/laravel-uuid-generation
+
+https://laravel.com/docs/8.x/middleware

@@ -39,8 +39,11 @@ Route::get('storage/app/{filename}', function ($filename)
 
 // Route::get('/', "indexController");
 
+Route::middleware(['auth'])->group(function () {
+    Route::resource('bio', BioController::class);
+});
+
 // use App\Http\Controllers\InPhotoController;
-Route::resource('bio', BioController::class);
 Route::resource('portfolio', PortfolioController::class);
 Route::resource('skill', SkillController::class);
 

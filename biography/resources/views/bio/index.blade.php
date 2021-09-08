@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+<a class="btn btn-primary mb-2" href="/bio/create">Add</a>
 <table class="table table-striped">
   <thead>
     <tr>

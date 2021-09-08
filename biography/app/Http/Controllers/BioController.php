@@ -20,7 +20,7 @@ class BioController extends Controller
      */
     public function index()
     {
-        $bios = Bio::all();
+        $bios = Bio::where('user_id', Auth::id())->get();
         return view('bio.index', ['bios' => $bios]);
     }
 
@@ -61,6 +61,7 @@ class BioController extends Controller
             $data['domain'] = '';
 
         Bio::create($data);
+        return redirect(route('bio.index'))->with('flash_message', ['Operation done!', 'success']);
     }
 
     /**
@@ -112,7 +113,7 @@ class BioController extends Controller
         }
 
         // redirect to edit action
-        return redirect()->back()->with('flash_message', ['Operation done!', 'success']);
+        return redirect(route('bio.index'))->with('flash_message', ['Operation done!', 'success']);
     }
 
     /**

@@ -84,9 +84,9 @@
                     <small class="alert alert-sm alert-{{ Session::get('flash_message')[1] }}">{{ Session::get('flash_message')[0] }}</small>
                 </div>
                 @endif
-                <div class="row">
-                    @yield('content')
-                </div>
+
+                @yield('content')
+
             </div>
         </main>
     </div>
