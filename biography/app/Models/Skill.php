@@ -9,8 +9,8 @@ class Skill extends Model
 {
     use HasFactory;
     protected $guarded = ['_token'];
-    // public function bio()
-    // {
-    //     return $this->hasOne(Bio::class);
-    // }
+    public function bio()
+    {
+        return $this->hasOne(Bio::class, 'id');
+    }
 }

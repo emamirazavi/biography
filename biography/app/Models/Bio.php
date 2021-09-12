@@ -42,4 +42,16 @@ class Bio extends Model
     {
         return $this->hasMany(Skill::class);
     }
+
+    // this is a recommended way to declare event handlers
+    public static function boot() {
+        parent::boot();
+
+        static::deleting(function($bio) { // before delete() method call this
+            foreach ($bio->portfolio as $port) {
+                $port->delete();
+            }
+            $bio->skill()->delete();
+        });
+    }
 }

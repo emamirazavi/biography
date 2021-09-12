@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Helper\FileSaver;
 
 class Portfolio extends Model
 {
@@ -12,6 +13,15 @@ class Portfolio extends Model
     // public $incrementing = true;
     public function bio()
     {
-        return $this->hasOne(Bio::class);
+        return $this->hasOne(Bio::class, 'id');
+    }
+
+    // this is a recommended way to declare event handlers
+    public static function boot() {
+        parent::boot();
+
+        static::deleting(function($portfolio) { // before delete() method call this
+            FileSaver::deleteFile($portfolio->img);
+        });
     }
 }

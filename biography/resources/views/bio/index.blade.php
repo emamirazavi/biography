@@ -31,10 +31,25 @@
           </div>
         </div>
         <a class="btn btn-secondary" href="/bio/{{ $bio->id }}/edit">Edit</a>
+        <button class="btn btn-danger" onclick="delete_bio({{ $bio->id }});">Delete</button>
 </div>
+<form method="POST" action="{{ route('bio.destroy', $bio->id) }}" id="delete-{{ $bio->id }}">
+@method('DELETE')
+@csrf
+</form>
       </td>
     </tr>
     @endforeach
   </tbody>
 </table>
+
+<script type="application/javascript">
+function delete_bio(bio_id)
+{
+  if (confirm('Are you sure you want to delete?')) {
+    $('#delete-' + bio_id).submit();
+  }
+}
+</script>
+
 @endsection

@@ -110,6 +110,10 @@ class PortfolioController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $model = Portfolio::find($id);
+        $title = $model->title;
+        $model->delete();
+        return redirect(route('portfolio.index'))->with('flash_message', [
+            sprintf('Portfolio "%s" deleted!', $title), 'success']);
     }
 }

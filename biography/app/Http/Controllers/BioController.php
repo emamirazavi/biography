@@ -53,6 +53,8 @@ class BioController extends Controller
 
         if ($request->hasFile('avatar')) {
             $data['avatar'] = FileSaver::saveAvatar($request);
+        } else {
+            $data['avatar'] = '';
         }
 
         $data['email_subject'] = 'Biography Contact';
@@ -124,6 +126,11 @@ class BioController extends Controller
      */
     public function destroy($id)
     {
-        //
+        // https://stackoverflow.com/questions/14174070/automatically-deleting-related-rows-in-laravel-eloquent-orm
+        $model = Bio::find($id);
+        $name = $model->name;
+        $model->delete();
+        return redirect(route('bio.index'))->with('flash_message', [
+            sprintf('Bio "%s" deleted!', $name), 'success']);
     }
 }

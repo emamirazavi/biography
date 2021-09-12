@@ -97,6 +97,10 @@ class SkillController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $model = Skill::find($id);
+        $title = $model->title;
+        $model->delete();
+        return redirect(route('skill.index'))->with('flash_message', [
+            sprintf('Skill "%s" deleted!', $title), 'success']);
     }
 }
