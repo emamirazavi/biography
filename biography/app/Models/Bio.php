@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Helper\FileSaver;
 
 class Bio extends Model
 {
@@ -48,6 +49,7 @@ class Bio extends Model
         parent::boot();
 
         static::deleting(function($bio) { // before delete() method call this
+            FileSaver::deleteFile($bio->avatar);
             foreach ($bio->portfolio as $port) {
                 $port->delete();
             }

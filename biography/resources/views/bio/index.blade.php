@@ -2,6 +2,8 @@
 
 @section('content')
 <a class="btn btn-primary mb-2" href="/bio/create">Add</a>
+<a class="btn btn-secondary mb-2" href="/portfolio/">Portfolios</a>
+<a class="btn btn-secondary mb-2" href="/skill/">Skills</a>
 <table class="table table-striped">
   <thead>
     <tr>

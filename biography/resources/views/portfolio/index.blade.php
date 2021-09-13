@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
+<a class="btn btn-secondary mb-2" href="/bio/">Bios</a>
+
 <table class="table table-striped">
   <thead>
     <tr>
@@ -19,8 +21,7 @@
       <th scope="row">{{ $port->id }}</th>
       <td>{{ $port->title }}</td>
       <td>{{ $port->img }}</td>
-      
-      <td></td>
+      <td>{{ $port->bio->name }}</td>
       <td>{{ $port->description }}</td>
       <td>
       <div class="btn-group" role="group" aria-label="Button group with nested dropdown">

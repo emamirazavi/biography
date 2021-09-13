@@ -13,7 +13,7 @@ class Portfolio extends Model
     // public $incrementing = true;
     public function bio()
     {
-        return $this->hasOne(Bio::class, 'id');
+        return $this->hasOne(Bio::class, 'id', 'bio_id');
     }
 
     // this is a recommended way to declare event handlers
