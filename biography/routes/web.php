@@ -46,6 +46,7 @@ Route::middleware(['auth'])->group(function () {
 // use App\Http\Controllers\InPhotoController;
 Route::resource('portfolio', PortfolioController::class);
 Route::resource('skill', SkillController::class);
+Route::get('pages/{english_name}', [App\Http\Controllers\PagesController::class, 'index']);
 
 Auth::routes(['register' => true]);
 

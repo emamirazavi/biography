@@ -4,6 +4,23 @@
 
 ## tips and tricks
 
+### what about relationships in models
+
+```
+bio
+id, name
+
+port
+id, bio_id, name
+
+port[bio_id] <------> bio[id]
+model1[local_key] <-----> model2[foreign_key]
+
+bio 1 <------> * port
+
+$this->hasOne(Bio::class, 'id', 'bio_id');
+```
+
 ### Automatically deleting related rows in Laravel (Eloquent ORM)
 
 @see https://stackoverflow.com/questions/14174070/automatically-deleting-related-rows-in-laravel-eloquent-orm
