@@ -20,8 +20,7 @@ Route::get('/', function () {
     return redirect('/home');
 });
 
-Route::get('storage/app/{filename}', function ($filename)
-{
+Route::get('storage/app/{filename}', function ($filename) {
     $path = storage_path('app/public/' . $filename);
 
     if (!File::exists($path)) {
@@ -38,15 +37,19 @@ Route::get('storage/app/{filename}', function ($filename)
 });
 
 // Route::get('/', "indexController");
-
 Route::middleware(['auth'])->group(function () {
     Route::resource('bio', BioController::class);
+    // use App\Http\Controllers\InPhotoController;
+    Route::resource('portfolio', PortfolioController::class);
+    Route::resource('skill', SkillController::class);
 });
 
-// use App\Http\Controllers\InPhotoController;
-Route::resource('portfolio', PortfolioController::class);
-Route::resource('skill', SkillController::class);
-Route::get('pages/{english_name}', [App\Http\Controllers\PagesController::class, 'index']);
+// https://laravel.com/docs/8.x/routing
+Route::match(
+    ['post', 'get'],
+    'pages/{english_name}',
+    [App\Http\Controllers\PagesController::class, 'index']
+);
 
 Auth::routes(['register' => true]);
 

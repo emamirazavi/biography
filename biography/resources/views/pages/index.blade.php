@@ -44,8 +44,8 @@ if (isset($_POST['submitButton'])) {
         $mail->isSMTP();                                            //Send using SMTP
         $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
         $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-        $mail->Username   = $bio->smtp_user;                     //SMTP username
-        $mail->Password   = $bio->smtp_pass;                               //SMTP password
+        $mail->Username   = env('BIOCHE_SMTP_USER');                     //SMTP username
+        $mail->Password   = env('BIOCHE_SMTP_PASS');                               //SMTP password
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
         $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
 
@@ -79,7 +79,7 @@ if (isset($_POST['submitButton'])) {
             $msg = "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
         }
         $_SESSION['error_message'] = $msg;
-        header('Location: ' . env('APP_URL'));
+        header('Location: ' . env('APP_URL') . '/pages/' . $bio->english_name);
         exit;
     }
 }
@@ -233,6 +233,7 @@ if (isset($_POST['submitButton'])) {
                     <!-- https://startbootstrap.com/solution/contact-forms-->
                     <!-- to get an API token!-->
                     <form id="contactForm" action="" method="post">
+                        @csrf
                         <!-- Name input-->
                         <div class="form-floating mb-3">
                             <input class="form-control" id="name" name="name" type="text" placeholder="Enter your name..." data-sb-validations="required" />
@@ -350,7 +351,7 @@ if (isset($_POST['submitButton'])) {
                                 <img class="img-fluid rounded mb-5" src="/storage/app/{{$portfolio->img}}" alt="..." />
                                 <!-- Portfolio Modal - Text-->
                                 <p class="mb-4">{{$portfolio->description}}</p>
-                                <button class="btn btn-primary" href="#!" data-bs-dismiss="modal">
+                                <button class="btn btn-primary" href="#" data-bs-dismiss="modal">
                                     <i class="fas fa-times fa-fw"></i>
                                     Close Window
                                 </button>
@@ -370,7 +371,7 @@ if (isset($_POST['submitButton'])) {
     <!-- * *                               SB Forms JS                               * *-->
     <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
     <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
-    <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+    <!-- <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script> -->
 
 
     <script type="text/javascript">
