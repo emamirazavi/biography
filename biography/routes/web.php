@@ -14,11 +14,13 @@ use Illuminate\Support\Facades\Response;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::get('/', function () {
-    // return view('welcome');
-    return redirect('/home');
+Route::middleware(['multi_domain'])->group(function () {
+    Route::get('/', function () {
+        // return view('welcome');
+        return redirect('/home');
+    });
 });
+
 
 Route::get('storage/app/{filename}', function ($filename) {
     $path = storage_path('app/public/' . $filename);
@@ -45,9 +47,12 @@ Route::middleware(['auth'])->group(function () {
 });
 
 // https://laravel.com/docs/8.x/routing
-Route::match(
-    ['post', 'get'],
-    'pages/{english_name}',
+// Route::match(
+//     ['post', 'get'],
+//     'pages/{english_name}',
+//     [App\Http\Controllers\PagesController::class, 'index']
+// );
+Route::any('pages/{english_name}',
     [App\Http\Controllers\PagesController::class, 'index']
 );
 

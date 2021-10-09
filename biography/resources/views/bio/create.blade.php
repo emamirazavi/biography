@@ -19,6 +19,20 @@ if ($bio->id) {
 {{ $bio->id ? method_field('PUT') : '' }}
 <div class="form-row">
     <div class="col-12 mb-3">
+        {{ Form::label('domain', 'Domain', ['class' => 'form-label']) }}
+        {{ Form::text('domain', null, ['class'=>'form-control '.($errors->has('domain')?'is-invalid':'')]) }}
+        <small class="form-text text-muted">
+            Register your own domain, setup DNS server by yourself and set bioche ip 217.219.159.149
+        </small>
+        @error('domain')
+        <div class="invalid-feedback">
+            {{ $message }}
+        </div>
+        @enderror
+    </div>
+</div>
+<div class="form-row">
+    <div class="col-12 mb-3">
         {{ Form::label('english_name', 'English Name', ['class' => 'form-label']) }}
         {{ Form::text('english_name', null, ['class'=>'form-control '.($errors->has('english_name')?'is-invalid':'')]) }}
         <small class="form-text text-muted">

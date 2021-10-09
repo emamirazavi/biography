@@ -34,6 +34,7 @@
         </div>
         <a class="btn btn-secondary" href="/bio/{{ $bio->id }}/edit">Edit</a>
         <button class="btn btn-danger" onclick="delete_bio({{ $bio->id }});">Delete</button>
+        <a class="btn btn-info" target="_blank" href="/pages/{{ $bio->english_name }}">Global View</a>
 </div>
 <form method="POST" action="{{ route('bio.destroy', $bio->id) }}" id="delete-{{ $bio->id }}">
 @method('DELETE')
