@@ -59,8 +59,7 @@ class BioController extends Controller
 
         $data['email_subject'] = 'Biography Contact';
 
-        $data['smtp_user'] = $data['smtp_pass'] =
-            $data['domain'] = '';
+        $data['smtp_user'] = $data['smtp_pass'] = '';
 
         Bio::create($data);
         return redirect(route('bio.index'))->with('flash_message', ['Operation done!', 'success']);

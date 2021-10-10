@@ -15,47 +15,49 @@ use Illuminate\Support\Facades\Response;
 |
 */
 Route::middleware(['multi_domain'])->group(function () {
-    Route::get('/', function () {
+    Route::any('/', function () {
         // return view('welcome');
         return redirect('/home');
     });
+
+    Route::get('storage/app/{filename}', function ($filename) {
+        $path = storage_path('app/public/' . $filename);
+    
+        if (!File::exists($path)) {
+            abort(404);
+        }
+    
+        $file = File::get($path);
+        $type = File::mimeType($path);
+    
+        $response = Response::make($file, 200);
+        $response->header("Content-Type", $type);
+    
+        return $response;
+    });
+    
+    // Route::get('/', "indexController");
+    Route::middleware(['auth'])->group(function () {
+        Route::resource('bio', BioController::class);
+        // use App\Http\Controllers\InPhotoController;
+        Route::resource('portfolio', PortfolioController::class);
+        Route::resource('skill', SkillController::class);
+    });
+    
+    // https://laravel.com/docs/8.x/routing
+    // Route::match(
+    //     ['post', 'get'],
+    //     'pages/{english_name}',
+    //     [App\Http\Controllers\PagesController::class, 'index']
+    // );
+    Route::any('pages/{english_name}',
+        [App\Http\Controllers\PagesController::class, 'index']
+    );
+    
+    Auth::routes(['register' => true]);
+    
+    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    
 });
 
 
-Route::get('storage/app/{filename}', function ($filename) {
-    $path = storage_path('app/public/' . $filename);
-
-    if (!File::exists($path)) {
-        abort(404);
-    }
-
-    $file = File::get($path);
-    $type = File::mimeType($path);
-
-    $response = Response::make($file, 200);
-    $response->header("Content-Type", $type);
-
-    return $response;
-});
-
-// Route::get('/', "indexController");
-Route::middleware(['auth'])->group(function () {
-    Route::resource('bio', BioController::class);
-    // use App\Http\Controllers\InPhotoController;
-    Route::resource('portfolio', PortfolioController::class);
-    Route::resource('skill', SkillController::class);
-});
-
-// https://laravel.com/docs/8.x/routing
-// Route::match(
-//     ['post', 'get'],
-//     'pages/{english_name}',
-//     [App\Http\Controllers\PagesController::class, 'index']
-// );
-Route::any('pages/{english_name}',
-    [App\Http\Controllers\PagesController::class, 'index']
-);
-
-Auth::routes(['register' => true]);
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
