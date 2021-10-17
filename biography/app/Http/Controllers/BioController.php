@@ -85,8 +85,11 @@ class BioController extends Controller
      */
     public function edit($id)
     {
-        $bio = Bio::find($id);
-        return view('bio.create', ['bio' => $bio]);
+        $model = Bio::find($id);
+        if ($model->user_id != Auth::id()) {
+            abort(403);
+        }
+        return view('bio.create', ['bio' => $model]);
     }
 
     /**
@@ -101,6 +104,9 @@ class BioController extends Controller
         Validator::bioCreateValidate($request);
 
         $bio = Bio::find($id);
+        if ($bio->user_id != Auth::id()) {
+            abort(403);
+        }
         $data = $request->all();
         $oldAvatar = $bio->avatar;
         if ($request->hasFile('avatar')) {

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Portfolio;
 use App\Helper\Validator;
 use App\Helper\FileSaver;
+use Auth;
 
 class PortfolioController extends Controller
 {
@@ -16,7 +17,11 @@ class PortfolioController extends Controller
      */
     public function index()
     {
-        $ports = Portfolio::orderBy('id', 'desc')->get();
+        $ports = Portfolio::orderBy('id', 'desc')
+        ->join('bio', 'bio_id', '=', 'bio.id')
+        ->where('bio.user_id', Auth::id())
+        ->select('portfolios.*')
+        ->get();
         return view('portfolio.index', ['ports' => $ports]);
     }
 
@@ -71,6 +76,9 @@ class PortfolioController extends Controller
     public function edit($id)
     {
         $model = Portfolio::find($id);
+        if ($model->bio->user_id != Auth::id()) {
+            abort(403);
+        }
         return view('portfolio.create', ['port' => $model]);
     }
 
@@ -87,6 +95,9 @@ class PortfolioController extends Controller
 
         // save model
         $port = Portfolio::find($id);
+        if ($model->bio->user_id != Auth::id()) {
+            abort(403);
+        }
         $data = $request->all();
         $oldFile = $port->img;
         if ($request->hasFile('img')) {

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Skill;
 use App\Helper\Validator;
 use App\Helper\FileSaver;
+use Auth;
 
 class SkillController extends Controller
 {
@@ -16,7 +17,11 @@ class SkillController extends Controller
      */
     public function index()
     {
-        $models = Skill::orderBy('id', 'desc')->get();
+        $models = Skill::orderBy('id', 'desc')
+            ->join('bio', 'skills.bio_id', '=', 'bio.id')
+            ->where('bio.user_id', Auth::id())
+            ->select('skills.*')
+            ->get();
         return view('skill.index', ['models' => $models]);
     }
 
@@ -68,6 +73,9 @@ class SkillController extends Controller
     public function edit($id)
     {
         $model = Skill::find($id);
+        if ($model->bio->user_id != Auth::id()) {
+            abort(403);
+        }
         return view('skill.create', ['model' => $model]);
     }
 
@@ -84,6 +92,9 @@ class SkillController extends Controller
 
         // save model
         $model = Skill::find($id);
+        if ($model->bio->user_id != Auth::id()) {
+            abort(403);
+        }
         $data = $request->all();
         $model->update($data);
         return redirect(route('skill.index'))->with('flash_message', ['Operation done!', 'success']);
@@ -101,6 +112,7 @@ class SkillController extends Controller
         $title = $model->title;
         $model->delete();
         return redirect(route('skill.index'))->with('flash_message', [
-            sprintf('Skill "%s" deleted!', $title), 'success']);
+            sprintf('Skill "%s" deleted!', $title), 'success'
+        ]);
     }
 }

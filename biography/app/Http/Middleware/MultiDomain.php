@@ -29,10 +29,10 @@ class MultiDomain
                 return response(view('pages.index', ['bio' => $bio]));
             }
         }
-        
-        if (!$bio &&
-            strpos($domain, env('APP_DOMAIN')) === false &&
-            strpos($domain, '127.0.0.1') === false
+
+        if (
+            !$bio &&
+            in_array($domain, [env('APP_DOMAIN'), '127.0.0.1', 'localhost'])
         ) {
             abort(404);
         }
