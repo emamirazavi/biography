@@ -74,6 +74,9 @@ class BioController extends Controller
     public function show($id)
     {
         $bio = Bio::find($id);
+        if ($bio->user_id != Auth::id()) {
+            abort(403);
+        }
         return view('bio.show', ['bio' => $bio]);
     }
 

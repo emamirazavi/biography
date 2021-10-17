@@ -11,6 +11,6 @@ class Skill extends Model
     protected $guarded = ['_token'];
     public function bio()
     {
-        return $this->hasOne(Bio::class, 'id');
+        return $this->hasOne(Bio::class, 'id', 'bio_id');
     }
 }

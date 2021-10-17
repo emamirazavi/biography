@@ -20,7 +20,7 @@ class MultiDomain
         // dd($request->server->all());
         $server = $request->server->all();
         $uri = $server['REQUEST_URI'];
-        $domain = $server['HTTP_HOST'];
+        $domain = explode(':',$server['HTTP_HOST'])[0];
         $bio = Bio::where('domain', $domain)->get()->last();
         if ($uri == '/') {
             if ($bio) {
@@ -29,12 +29,11 @@ class MultiDomain
                 return response(view('pages.index', ['bio' => $bio]));
             }
         }
-
         if (
             !$bio &&
             in_array($domain, [env('APP_DOMAIN'), '127.0.0.1', 'localhost']) === false
         ) {
-            abort(404);
+            // abort(404);
         }
 
         return $next($request);
