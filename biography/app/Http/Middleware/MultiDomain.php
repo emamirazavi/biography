@@ -32,7 +32,7 @@ class MultiDomain
 
         if (
             !$bio &&
-            in_array($domain, [env('APP_DOMAIN'), '127.0.0.1', 'localhost'])
+            in_array($domain, [env('APP_DOMAIN'), '127.0.0.1', 'localhost']) === false
         ) {
             abort(404);
         }
